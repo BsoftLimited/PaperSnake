@@ -1,12 +1,13 @@
-package com.bsoft.papersnake.Utils.Data;
+package com.bsoft.papersnake.Utils;
 
-public class DataArray extends Data<Integer>{
+public class JSONArray extends JSON<Integer>{
     Object[] data;
     int size;
-    public DataArray(){ this.size = 0;}
+    public JSONArray(){ this.size = 0;}
 
-    public DataArray(String data) throws DataException{
-
+    public JSONArray(String data) throws JSONException{
+        this.size = 0;
+        JSON.parse(this, data);
     }
 
     public void put(Object value){
@@ -24,16 +25,15 @@ public class DataArray extends Data<Integer>{
     }
 
     public void clear(){
-        this.data = null;
-        this.size = 0;
+        this.data = null;  this.size = 0;
     }
 
     @Override
     public boolean isEmpty() { return this.size == 0; }
 
     @Override
-    public Object get(Integer value) throws DataException {
-        if(value >= size){ throw new DataException("Index out of bounds, Array if size " + size + " but " + value + " given"); }
+    public Object get(Integer value) throws JSONException {
+        if(value >= size){ throw new JSONException("Index out of bounds, Array if size " + size + " but " + value + " given"); }
         return data[value];
     }
 
@@ -58,4 +58,18 @@ public class DataArray extends Data<Integer>{
 
     @Override
     public int size() { return size; }
+
+    @Override
+    public String toString(){
+        StringBuilder builder = new StringBuilder().append("[");
+        for(int i = 0; i < this.data.length; i++){
+            if(data[i] instanceof String){
+                builder.append("'").append(this.data[i]).append("'");
+            }else{
+                builder.append(this.data[i].toString());
+            }
+            if(i < this.data.length - 1){ builder.append(", "); }
+        }
+        return builder.append("]").toString();
+    }
 }
